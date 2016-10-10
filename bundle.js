@@ -20,6 +20,7 @@ var pockets = [
 ]
 var stick = {x: 0, y: 0, power: 0, charge: false}
 var balls = []
+var axisList = [];
 for(var i = 0; i < 18; i++){
   balls.push({
     position: {x: 0, y: 0},
@@ -28,7 +29,9 @@ for(var i = 0; i < 18; i++){
     color: 'gray',
     pocketed: false
   });
+  axisList.sort(function(a,b){return b.position.x - a.position.x});
 }
+//balls.sort(function(a,b){return b.position.x - a.position.x});
 rack();
 
 /**
@@ -175,6 +178,27 @@ function update(elapsedTime) {
   });
 
   // check for ball collisions
+  // First pass - check for potential collision
+  axisList.sort(function(a,b){return b.x- a.x});
+  var active = [];
+  var potentiallyColliding = [];
+  axisList.forEach(function(ball, index) {
+    // remove balls we've passed
+    active = active.fileter(function(oball) {
+      return oball.position.x > ball.postion.x - 30;
+    });
+    active.forEach(function(oball) {
+      potentiallyColliding.push({a: oball, b: ball});
+    });
+    active.push(ball);
+  });
+
+  // second pass - check for REAL collisions
+  var collisions = [];
+  potentiallyColliding.forEach(function(pair) {
+    //if(a.position.x)
+  });
+
   // TODO: Check for ball collisions
   // TODO: Process ball collisions
 }
